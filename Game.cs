@@ -14,6 +14,7 @@ namespace DungeonExplorer
         public Room currentRoom { get; set; }
         public Testing test { get; set; }
         public RoomLayout MapLayout { get; set; }
+        public InventoryManager Inventory { get; set; }
 
         public Game(string userName)
         {
@@ -46,7 +47,7 @@ namespace DungeonExplorer
                     case ConsoleKey.F:
                         //Prints the players inventory
                         Console.WriteLine("Inventory:");
-                        Console.WriteLine(player.InventoryContents());
+                        Console.WriteLine(player.Inventory.InventoryContents());
                         break;
                     case ConsoleKey.E:
                         //Prints the description of the room.
@@ -62,8 +63,8 @@ namespace DungeonExplorer
                         {
                             //Prints Picked Up and the item name, as well as adding the item to the inventory. 
                             Console.WriteLine("Picked Up " + item);
-                            player.PickUpItem(item);
-                            string Inventory = player.InventoryContents();
+                            player.Inventory.PickUpItem(item);
+                            string Inventory = player.Inventory.InventoryContents();
                             test.InventoryCheck(Inventory, item);
                             //Sets Item Variable to be blank
                             item = "";

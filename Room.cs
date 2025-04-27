@@ -8,6 +8,8 @@ namespace DungeonExplorer
     {
         private string description;
 
+        public bool HasItem = new bool true; 
+
         public Room(string description)
         {
             this.description = description;
