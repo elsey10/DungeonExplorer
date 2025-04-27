@@ -13,20 +13,21 @@ namespace DungeonExplorer
         public Player player { get; set; }
         public Room currentRoom { get; set; }
         public Testing test { get; set; }
+        public RoomLayout MapLayout { get; set; }
 
         public Game(string userName)
         {
-            //Instantiates the Player and currentRoom objects using the classes in Room.cs and Player.cs
+            //Instantiates the Player and currentRoom objects using the classes in R    oom.cs and Player.cs
             player = new Player(userName, 15);
-            currentRoom = new Room("A kitchen. There is a knife resting on the counter.");
             test = new Testing();
+            MapLayout = new RoomLayout();
         }
         public void Start()
         {
             // Change the playing logic into true and populate the while loop
             bool playing = true;
             //Displays the controls to the player
-            Console.WriteLine("Q - Show Stats.  F - Show Inventory.  E - Show Room Description. G - Pick up Item. R - Quit Game.");
+            Console.WriteLine("Q - Show Stats.  F - Show Inventory.  E - Show Room Description. G - Pick up Item. W - Advance Room R - Quit Game.");
             //Establishes the Item Variable so the player can pick it up, it is established here to stop the same item being grabbed more than once. 
             string item = "Knife";
             //The loop of game logic
@@ -49,7 +50,11 @@ namespace DungeonExplorer
                         break;
                     case ConsoleKey.E:
                         //Prints the description of the room.
-                        Console.WriteLine(currentRoom.GetDescription());
+                        MapLayout.PrintCurrentRoom();
+                        break;
+                    case ConsoleKey.W:
+                        Console.WriteLine("You make your way down a corridor. What lies ahead.");
+                        MapLayout.MovingRoom();
                         break;
                     case ConsoleKey.G:
                         //If statement to check the Item variable has a value

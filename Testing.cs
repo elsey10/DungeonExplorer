@@ -11,4 +11,4 @@ namespace DungeonExplorer
             Console.WriteLine("Item has been picked up!");
         }
     }
-}
+}   
