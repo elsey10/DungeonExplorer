@@ -1,22 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DungeonExplorer
 {
-    public class InventoryManager
-    {
-        public List<string> Inventory = new List<string>();
-
-        public void PickUpItem(string item)
-        {
-            Inventory.Add(item);
-        }
-        public string InventoryContents()
-        {
-            return string.Join(", ", Inventory);
-        }
-    }
-
     public abstract class Items
     {
         public string ItemDescription { get; set; }
@@ -60,5 +47,26 @@ namespace DungeonExplorer
             Console.WriteLine("Using" , ItemDescription , "It heals" , HealingAmount , "health"); 
         }
     }
+
+    public class InventoryManager
+    {
+        public List<Items> Inventory = new List<Items>();
+
+        public void PickUpItem(Items item)
+        {
+            Inventory.Add(item);
+        }
+
+        public void RemoveItem(Items item)
+        {
+            Inventory.Remove(item);
+        }
+
+        public string InventoryContents()
+        {
+            return string.Join(", ", Inventory.Select(item => item.ItemDescription));
+        }
+    }
+
 }
 

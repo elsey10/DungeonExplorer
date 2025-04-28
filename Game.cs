@@ -28,18 +28,55 @@ namespace DungeonExplorer
         public void CombatState()
         {
             bool inCombat = true;
+            Console.WriteLine("");
+            Console.WriteLine("A Monster! Prepare for battle!");
+            Console.WriteLine("");
             while (inCombat)
             {
-                Console.WriteLine("A Monster! Prepare for battle!");
-                Console.WriteLine("");
-            }
+                Console.WriteLine("You currently have " + player.Inventory.InventoryContents());
+                Console.WriteLine("Input the number corrosponding to the item you wish to use!");
+                var CombatInput = Console.ReadKey(true).Key;
+
+                if (player.Inventory.Inventory.Count > 0)
+                    switch (CombatInput)
+                    {
+                        case ConsoleKey.D1:
+                            var item = player.Inventory.Inventory[0];
+                            if (item is Weapons weapon)
+                            {
+                                weapon.ItemUse();
+                                player.TakeDamage(10);
+                            }
+                            else if (item is Potions potion)
+                            {
+                                potion.ItemUse();
+                                player.Inventory.RemoveItem(item);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid item type!");
+                            }
+                            break;
+                        case ConsoleKey.R:
+                            Console.WriteLine("Exiting Game");
+                            Console.ReadKey();
+                            Environment.Exit(0);
+                            break;
+                        default:
+                            Console.WriteLine("Invalid Input! Please try again.");
+                            break;
+                    }
+                else
+                {
+                    Console.WriteLine("Your inventory is empty");
+                }
+            }  
         }
 
         public void Start()
         {
             // Change the playing logic into true and populate the while loop
             bool playing = true;
-            int ItemTracker = 0;
             //Displays the controls to the player
             Console.WriteLine("Q - Show Stats.  F - Show Inventory.  E - Show Room Description. G - Pick up Item. W - Advance Room R - Quit Game.");
             //The loop of game logic
@@ -70,6 +107,7 @@ namespace DungeonExplorer
                         Console.WriteLine("You make your way down a corridor. What lies ahead.");
                         Console.WriteLine("");
                         MapLayout.MovingRoom();
+                        CombatState();
                         break;
                     case ConsoleKey.G:
                         // Check if the current room has an item
@@ -79,7 +117,7 @@ namespace DungeonExplorer
                             Console.WriteLine("Picked Up " + MapLayout.rooms[MapLayout.CurrentRoomNumber].RoomItem.ItemDescription);
 
                             // Add the item to the player's inventory
-                            player.Inventory.PickUpItem(MapLayout.rooms[MapLayout.CurrentRoomNumber].RoomItem.ItemDescription);
+                            player.Inventory.PickUpItem(MapLayout.rooms[MapLayout.CurrentRoomNumber].RoomItem);
 
                             // Check the inventory using the Testing class (optional debugging/validation)
                             string inventoryContents = player.Inventory.InventoryContents();
