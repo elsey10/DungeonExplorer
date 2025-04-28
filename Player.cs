@@ -21,7 +21,7 @@ namespace DungeonExplorer
             Health = health;
         }
 
-        public abstract void Attack();
+        public abstract int Attack();
 
         public bool IsAlive()
         {
@@ -30,7 +30,6 @@ namespace DungeonExplorer
     }
     public class Player : Creature, IDamageable
     {
-        public int Damage { get; private set; }
 
         public InventoryManager Inventory { get; set; }
 
@@ -39,9 +38,10 @@ namespace DungeonExplorer
             Inventory = new InventoryManager();
         }
 
-        public override void Attack()
+        public override int Attack()
         {
             Console.WriteLine("An attack!");
+            return 5;
         }
 
         public void TakeDamage(int amount)
@@ -68,9 +68,23 @@ namespace DungeonExplorer
             
         }
 
-        public override void Attack()
+        public override int Attack()
         {
-            Console.WriteLine("An attack!");
+            return 5;
+        }
+
+        public void TakeDamage(int amount)
+        {
+            Health -= amount;
+            if (Health <= 0)
+            {
+                Console.WriteLine(Name + "Slain!");
+                Console.WriteLine("You may continue exploring now!");
+            }
+            else
+            {
+                Console.WriteLine(Name + "got hit for" + amount + "but it survived");
+            }
         }
     }
 }

@@ -12,12 +12,15 @@ namespace DungeonExplorer
 
         public Items RoomItem { get; set; }
 
-        public Room(string description, Items item)
+        public Monster RoomMonster { get; set; }
+
+        public Room(string description, Items item, Monster monster)
         {
             this.description = description;
-            RoomItem = item; 
-        }
-
+            RoomItem = item;
+            RoomMonster = monster;
+        } 
+        
         public string GetDescription()
         {
             return description;
@@ -29,13 +32,13 @@ namespace DungeonExplorer
         public List<Room> rooms = new List<Room>
         {
                new Room("A prison cell. There is a knife resting upon the counter. There is a large wooden door ahead of you.",
-                new Weapons("Iron Knife", 15)),
+                new Weapons("Iron Knife", 15), null),
             new Room("A guard room, there is a desk in the corner. It has a small health potion rested on its edge. There is a door to your right.",
-                new Potions("Health Potion", 25)),
+                new Potions("Health Potion", 25), new Monster ("Goblin", 10)),
             new Room("A large banquet hall. There is an array of food and drink spread across the large tables. A wooden door stands tall on the back wall.",
-                new Weapons("Silver Dagger", 25)),
+                new Weapons("Silver Dagger", 25), new Monster ("Devil", 15)),
             new Room("A courtyard. There is a large metal statue of a king in the centre. Surrounding it there is a variety of dying flowers.",
-                null) // No item in this room
+                null, null) // No item in this room
         };
 
         public int CurrentRoomNumber = 0;

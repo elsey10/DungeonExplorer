@@ -44,8 +44,9 @@ namespace DungeonExplorer
                             var item = player.Inventory.Inventory[0];
                             if (item is Weapons weapon)
                             {
-                                weapon.ItemUse();
-                                player.TakeDamage(10);
+                                int DamageTaken = weapon.ItemUse();
+                                MapLayout.rooms[MapLayout.CurrentRoomNumber].RoomMonster.TakeDamage(DamageTaken);
+                                inCombat = false;
                             }
                             else if (item is Potions potion)
                             {
@@ -107,7 +108,11 @@ namespace DungeonExplorer
                         Console.WriteLine("You make your way down a corridor. What lies ahead.");
                         Console.WriteLine("");
                         MapLayout.MovingRoom();
-                        CombatState();
+                        if (MapLayout.rooms[MapLayout.CurrentRoomNumber].RoomMonster != null)
+                        {
+                            CombatState();
+                            break;
+                        }    
                         break;
                     case ConsoleKey.G:
                         // Check if the current room has an item

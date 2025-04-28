@@ -15,7 +15,7 @@ namespace DungeonExplorer
         }
 
         // Optional: Abstract method(s) that must be implemented by derived classes
-        public abstract void ItemUse();
+        public abstract int ItemUse();
     }
 
     public class Weapons : Items
@@ -27,9 +27,10 @@ namespace DungeonExplorer
             Damage = damage;
         }
 
-        public override void ItemUse()
+        public override int ItemUse()
         {
-            Console.WriteLine("Using" , ItemDescription , "It deals" , Damage , "damage");
+            Console.WriteLine("An attack using " + ItemDescription + " It deals " + Damage + " damage");
+            return Damage;
         }
     }
 
@@ -42,9 +43,10 @@ namespace DungeonExplorer
             HealingAmount = healingAmount;
         }
 
-        public override void ItemUse()
+        public override int ItemUse()
          {
-            Console.WriteLine("Using" , ItemDescription , "It heals" , HealingAmount , "health"); 
+            Console.WriteLine("Using" , ItemDescription , "It heals" , HealingAmount , "health");
+            return HealingAmount;
         }
     }
 
