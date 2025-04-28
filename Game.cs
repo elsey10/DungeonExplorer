@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using System.Media;
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.Win32;
 
 namespace DungeonExplorer
@@ -23,15 +24,26 @@ namespace DungeonExplorer
             test = new Testing();
             MapLayout = new RoomLayout();
         }
+
+        public void CombatState()
+        {
+            bool inCombat = true;
+            while (inCombat)
+            {
+                Console.WriteLine("A Monster! Prepare for battle!");
+                Console.WriteLine("");
+            }
+        }
+
         public void Start()
         {
             // Change the playing logic into true and populate the while loop
             bool playing = true;
+            int ItemTracker = 0;
             //Displays the controls to the player
             Console.WriteLine("Q - Show Stats.  F - Show Inventory.  E - Show Room Description. G - Pick up Item. W - Advance Room R - Quit Game.");
-            //Establishes the Item Variable so the player can pick it up, it is established here to stop the same item being grabbed more than once. 
-            string item = "Knife";
             //The loop of game logic
+            
             while (playing)
             {
                 //Reads a key input and stores it as variable "input"
@@ -54,25 +66,32 @@ namespace DungeonExplorer
                         MapLayout.PrintCurrentRoom();
                         break;
                     case ConsoleKey.W:
+                        //Prints a filler phrase and a gap line before running the MovingRoom function
                         Console.WriteLine("You make your way down a corridor. What lies ahead.");
+                        Console.WriteLine("");
                         MapLayout.MovingRoom();
                         break;
                     case ConsoleKey.G:
-                        //If statement to check the Item variable has a value
-                        if (item != "")
+                        // Check if the current room has an item
+                        if (MapLayout.rooms[MapLayout.CurrentRoomNumber].RoomItem != null)
                         {
-                            //Prints Picked Up and the item name, as well as adding the item to the inventory. 
-                            Console.WriteLine("Picked Up " + item);
-                            player.Inventory.PickUpItem(item);
-                            string Inventory = player.Inventory.InventoryContents();
-                            test.InventoryCheck(Inventory, item);
-                            //Sets Item Variable to be blank
-                            item = "";
+                            // Inform the player about the picked-up item
+                            Console.WriteLine("Picked Up " + MapLayout.rooms[MapLayout.CurrentRoomNumber].RoomItem.ItemDescription);
+
+                            // Add the item to the player's inventory
+                            player.Inventory.PickUpItem(MapLayout.rooms[MapLayout.CurrentRoomNumber].RoomItem.ItemDescription);
+
+                            // Check the inventory using the Testing class (optional debugging/validation)
+                            string inventoryContents = player.Inventory.InventoryContents();
+                            test.InventoryCheck(inventoryContents, MapLayout.rooms[MapLayout.CurrentRoomNumber].RoomItem.ItemDescription);
+
+                            // Clear the item from the current room
+                            MapLayout.rooms[MapLayout.CurrentRoomNumber].RoomItem = null;
                         }
                         else
                         {
-                            //Prints if there is no Item
-                            Console.WriteLine("There is no item to pick up");
+                            // Inform the player that there's no item to pick up
+                            Console.WriteLine("There is no item to pick up in this room.");
                         }
                         break;
                     case ConsoleKey.R:

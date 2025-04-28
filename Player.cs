@@ -36,4 +36,17 @@ namespace DungeonExplorer
             Console.WriteLine("An attack!");
         }
     }
+
+    public class Monster : Creature
+    {
+        public Monster(string name, int health) : base(name, health)
+        {
+            
+        }
+
+        public override void Attack()
+        {
+            Console.WriteLine("An attack!");
+        }
+    }
 }
