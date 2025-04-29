@@ -11,8 +11,10 @@ namespace DungeonExplorer
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Welcome to the Dungeon Crawler Game!");
             Console.WriteLine("Please enter your name.");
             string userName = Console.ReadLine();
+            Console.WriteLine("Welcome " + userName + "!");
             Game game = new Game(userName);
             game.Start();
             Console.WriteLine("Press any key to exit...");

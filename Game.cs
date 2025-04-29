@@ -25,6 +25,29 @@ namespace DungeonExplorer
             MapLayout = new RoomLayout();
         }
 
+        //Method to handle the Items being used. Checks for the item types then uses them as needed.
+        public void ItemHandler (Items item)
+        {
+            //Checks if the item is a Weapon
+            if (item is Weapons weapon)
+            {
+                //Use the weapon and store the damage it will deal in DamageTaken
+                int DamageTaken = weapon.ItemUse(); 
+                //Runs the TakeDamage method from the Monster class to cause the monster to lose health. 
+                MapLayout.rooms[MapLayout.CurrentRoomNumber].RoomMonster.TakeDamage(DamageTaken);
+            }
+            else if (item is Potions potion)
+            {
+                int HealthGained = potion.ItemUse();
+                player.Inventory.RemoveItem(item);
+                player.Health += HealthGained;
+            }
+            else
+            {
+                Console.WriteLine("Invalid item type!");
+            }
+        }
+
         public void CombatState()
         {
             bool inCombat = true;
@@ -33,43 +56,53 @@ namespace DungeonExplorer
             Console.WriteLine("");
             while (inCombat)
             {
-                Console.WriteLine("You currently have " + player.Inventory.InventoryContents());
-                Console.WriteLine("Input the number corrosponding to the item you wish to use!");
-                var CombatInput = Console.ReadKey(true).Key;
+                if (MapLayout.rooms[MapLayout.CurrentRoomNumber].RoomMonster.IsAlive() == true)
+                {
+                    int MonsterAttack = MapLayout.rooms[MapLayout.CurrentRoomNumber].RoomMonster.Attack();
+                    Console.WriteLine("The " + MapLayout.rooms[MapLayout.CurrentRoomNumber].RoomMonster.Name + 
+                        " attacks! It hits you for " + MonsterAttack.ToString() + " damage");
+                    player.TakeDamage(MonsterAttack);
 
-                if (player.Inventory.Inventory.Count > 0)
-                    switch (CombatInput)
+                    Console.WriteLine("You currently have " + player.Inventory.InventoryContents());
+                    Console.WriteLine("Input the number corrosponding to the item you wish to use!");
+                    var CombatInput = Console.ReadKey(true).Key;
+
+                    if (player.Inventory.Inventory.Count > 0)
                     {
-                        case ConsoleKey.D1:
-                            var item = player.Inventory.Inventory[0];
-                            if (item is Weapons weapon)
+                        if (CombatInput >= ConsoleKey.D1 && CombatInput <= ConsoleKey.D3)
+                        {
+                            int selectedItem = CombatInput - ConsoleKey.D1;
+
+                            if (selectedItem < player.Inventory.Inventory.Count)
                             {
-                                int DamageTaken = weapon.ItemUse();
-                                MapLayout.rooms[MapLayout.CurrentRoomNumber].RoomMonster.TakeDamage(DamageTaken);
-                                inCombat = false;
-                            }
-                            else if (item is Potions potion)
-                            {
-                                potion.ItemUse();
-                                player.Inventory.RemoveItem(item);
+                                var item = player.Inventory.Inventory[selectedItem];
+                                ItemHandler(item);
                             }
                             else
                             {
-                                Console.WriteLine("Invalid item type!");
+                                Console.WriteLine("Invalid selection, no item in that slot.");
                             }
-                            break;
-                        case ConsoleKey.R:
+                        }
+                        else if (CombatInput == ConsoleKey.Escape)
+                        {
                             Console.WriteLine("Exiting Game");
                             Console.ReadKey();
                             Environment.Exit(0);
-                            break;
-                        default:
-                            Console.WriteLine("Invalid Input! Please try again.");
-                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid Input. Please try again.");
+                        }
                     }
+                    else
+                    {
+                        Console.WriteLine("Your inventory is empty");
+                    }
+
+                }
                 else
                 {
-                    Console.WriteLine("Your inventory is empty");
+                    inCombat = false;
                 }
             }  
         }
@@ -79,9 +112,10 @@ namespace DungeonExplorer
             // Change the playing logic into true and populate the while loop
             bool playing = true;
             //Displays the controls to the player
-            Console.WriteLine("Q - Show Stats.  F - Show Inventory.  E - Show Room Description. G - Pick up Item. W - Advance Room R - Quit Game.");
+            Console.WriteLine("Q - Show Stats.  F - Show Inventory.  E - Show Room Description. G - Pick up Item. W - Advance Room ESC - Quit Game.");
+            MapLayout.PrintCurrentRoom();
             //The loop of game logic
-            
+
             while (playing)
             {
                 //Reads a key input and stores it as variable "input"
@@ -110,6 +144,7 @@ namespace DungeonExplorer
                         MapLayout.MovingRoom();
                         if (MapLayout.rooms[MapLayout.CurrentRoomNumber].RoomMonster != null)
                         {
+                            Console.ReadKey();
                             CombatState();
                             break;
                         }    
@@ -137,7 +172,7 @@ namespace DungeonExplorer
                             Console.WriteLine("There is no item to pick up in this room.");
                         }
                         break;
-                    case ConsoleKey.R:
+                    case ConsoleKey.Escape:
                         //Ends the play loop
                         playing = false;
                         break;

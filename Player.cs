@@ -14,6 +14,7 @@ namespace DungeonExplorer
     {
         public string Name { get; set; }
         public int Health { get; set; }
+        public int Damage { get; set; }
 
         public Creature(string name, int health)
         {
@@ -63,14 +64,15 @@ namespace DungeonExplorer
 
     public class Monster : Creature
     {
-        public Monster(string name, int health) : base(name, health)
+
+        public Monster(string name, int health, int damage) : base(name, health)
         {
-            
+            Damage = damage;
         }
 
         public override int Attack()
         {
-            return 5;
+            return Damage;
         }
 
         public void TakeDamage(int amount)
@@ -78,12 +80,12 @@ namespace DungeonExplorer
             Health -= amount;
             if (Health <= 0)
             {
-                Console.WriteLine(Name + "Slain!");
+                Console.WriteLine(Name + " Slain!");
                 Console.WriteLine("You may continue exploring now!");
             }
             else
             {
-                Console.WriteLine(Name + "got hit for" + amount + "but it survived");
+                Console.WriteLine(Name + " got hit for " + amount + " but it survived");
             }
         }
     }
