@@ -134,6 +134,7 @@ namespace DungeonExplorer
             bool playing = true;
             //Displays the controls to the player
             Console.WriteLine("Q - Show Stats.  F - Show Inventory.  E - Show Room Description. G - Pick up Item. W - Advance Room ESC - Quit Game.");
+            Console.WriteLine("You may also press 1, 2 or 3 to use the item in that inventory slot");
             MapLayout.PrintCurrentRoom();
             //The loop of game logic
 
@@ -194,14 +195,14 @@ namespace DungeonExplorer
                         }
                         break;
                     case ConsoleKey.Escape:
-                        //Ends the play loop
-                        playing = false;
-                        break;
-                    default:
-                        //Prints if there is an incorrect input
-                        Console.WriteLine("Please Input a valid control");
-                        break;
-                }
+                                //Ends the play loop
+                                playing = false;
+                                break;
+                            default:
+                                //Prints if there is an incorrect input
+                                Console.WriteLine("Please Input a valid control");
+                                break;
+                            }
             }
         }
     }

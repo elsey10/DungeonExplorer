@@ -49,23 +49,28 @@ namespace DungeonExplorer
         {
             HealingAmount = healingAmount;
         }
-
+        //ItemUse altered for the potion
         public override int ItemUse()
          {
-            Console.WriteLine("Using" , ItemDescription , "It heals" , HealingAmount , "health");
+            //Prints a line declaring how much the player has been healed for
+            Console.WriteLine("Using" + ItemDescription + "It heals" + HealingAmount + "health");
+            //Returns the quantity of healing so it can be used in other locations
             return HealingAmount;
         }
     }
-
+    //The inventory manager class, this is used to manage the players inventory.
     public class InventoryManager
     {
+        //Creates the new list of Items to act as the players inventory
         public List<Items> Inventory = new List<Items>();
 
+        //PickUpItem method. It adds whatever is passed into the method to the player inventory 
         public void PickUpItem(Items item)
         {
             Inventory.Add(item);
         }
 
+        //RemoveItem method. Removes whatever is passed into the method from the inventory
         public void RemoveItem(Items item)
         {
             Inventory.Remove(item);
