@@ -75,7 +75,7 @@ namespace DungeonExplorer
         {
             Inventory.Remove(item);
         }
-
+        //A simple method that just prints the Inventory List
         public string InventoryContents()
         {
             return string.Join(", ", Inventory.Select(item => item.ItemDescription));
